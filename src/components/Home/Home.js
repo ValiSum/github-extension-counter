@@ -1,4 +1,3 @@
-import React from 'react'
 import { Flex, useColorModeValue } from '@chakra-ui/react'
 import { FormView } from './components/FormView'
 
