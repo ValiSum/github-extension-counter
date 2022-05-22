@@ -7,7 +7,7 @@ const i18ns = {
   descOptionLabel: 'Desc',
 }
 
-export const SortSelector = ({ name, label, defaultValue }) => {
+export const SortSelector = ({ name, label, defaultValue, disabled }) => {
   const { setSortValues } = useApp()
 
   return (
@@ -21,6 +21,7 @@ export const SortSelector = ({ name, label, defaultValue }) => {
         size="xs"
         onChange={setSortValues}
         defaultValue={defaultValue}
+        disabled={disabled}
       >
         <option value={OPTION_VALUES.asc}>{i18ns.ascOptionLabel}</option>
         <option value={OPTION_VALUES.desc}>{i18ns.descOptionLabel}</option>

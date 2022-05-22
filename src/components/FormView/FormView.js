@@ -75,7 +75,9 @@ export const FormView = () => {
           loadingText={i18ns.loadingText}
           onClick={getData}
           disabled={
-            state.isLoading || owner.length === 0 || repository.length === 0
+            state.isLoading ||
+            Boolean(owner.length === 0) ||
+            Boolean(repository.length === 0)
           }
         >
           {i18ns.showButton}

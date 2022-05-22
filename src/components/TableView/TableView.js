@@ -4,8 +4,6 @@ import {
   Text,
   Badge,
   Flex,
-  InputGroup,
-  Input,
   Table,
   Thead,
   Tbody,
@@ -17,6 +15,7 @@ import {
 import { useApp } from '../../AppProvider'
 import { FilterInput } from './components/FilterInput'
 import { SortSelector } from './components/SortSelector'
+import { sortAndFilterExtensions } from './utils/sortAndFilterExtensions'
 
 const i18ns = {
   tableTitle1: 'Cantidad',
@@ -54,6 +53,7 @@ export const TableView = () => {
                     name="quantity"
                     label={i18ns.tableTitle1}
                     defaultValue={quantity}
+                    disabled={Boolean(extension.length > 0)}
                   />
                 </Th>
                 <Th>
@@ -61,12 +61,13 @@ export const TableView = () => {
                     name="extension"
                     label={i18ns.tableTitle2}
                     defaultValue={extension}
+                    disabled={Boolean(quantity.length > 0)}
                   />
                 </Th>
               </Tr>
             </Thead>
             <Tbody>
-              {Object.entries(state.extensions).map(item => (
+              {sortAndFilterExtensions(state).map(item => (
                 <Tr key={item[0]}>
                   <Td>{item[1]}</Td>
                   <Td>{item[0]}</Td>
