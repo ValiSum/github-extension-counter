@@ -12,8 +12,10 @@ import { useApp } from '../../AppProvider'
 
 const i18ns = {
   title: 'Bienvenido',
-  button: 'Mostrar',
+  ownerPlaceholderInput: 'Propietario',
+  repositoryPlaceholderInput: 'Repositorio',
   loadingText: 'Cargando',
+  showButton: 'Mostrar',
 }
 
 export const FormView = () => {
@@ -46,7 +48,7 @@ export const FormView = () => {
           <Input
             type="text"
             name="owner"
-            placeholder="Owner"
+            placeholder={i18ns.ownerPlaceholderInput}
             value={owner}
             onChange={setFormValues}
             disabled={state.isLoading}
@@ -57,7 +59,7 @@ export const FormView = () => {
           <Input
             type="text"
             name="repository"
-            placeholder="Repository"
+            placeholder={i18ns.repositoryPlaceholderInput}
             value={repository}
             onChange={setFormValues}
             disabled={state.isLoading}
@@ -76,7 +78,7 @@ export const FormView = () => {
             state.isLoading || owner.length === 0 || repository.length === 0
           }
         >
-          {i18ns.button}
+          {i18ns.showButton}
         </Button>
       </VStack>
     </Container>
