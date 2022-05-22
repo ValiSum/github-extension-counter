@@ -17,7 +17,7 @@ export const INITIAL_STATE = {
   sortValues: { quantity: '', extension: '' },
 }
 
-export const TOKEN = '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'
+export const TOKEN = process.env.REACT_APP_GITHUB_ACCESS_TOKEN
 
 export const OPTION_VALUES = {
   asc: 'asc',
