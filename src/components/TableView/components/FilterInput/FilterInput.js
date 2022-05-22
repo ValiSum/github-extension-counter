@@ -11,9 +11,10 @@ export const FilterInput = () => {
   const { filterValue } = state
 
   return (
-    <InputGroup backgroundColor="whiteAlpha.900" borderRadius="6">
+    <InputGroup borderRadius="6">
       <Input
         size="md"
+        variant="filled"
         type="text"
         placeholder={i18ns.placeholder}
         value={filterValue}
@@ -21,9 +22,7 @@ export const FilterInput = () => {
       />
       {filterValue && (
         <InputRightElement
-          children={
-            <CloseIcon color="teal" onClick={() => setFilterValue('')} />
-          }
+          children={<CloseIcon onClick={() => setFilterValue('')} />}
         />
       )}
     </InputGroup>

@@ -18,13 +18,13 @@ const i18ns = {
   appTitle: 'Github Extension Counter',
   backButton: 'Volver',
   rightsText: '© All rights are reserved',
-  authorText: 'Made with 💖 by',
+  authorText: 'Made with ♥ by',
   authorName: 'ValiSum',
 }
 
 export const Layout = () => {
-  const { state } = useApp()
-  const bg = useColorModeValue('gray.300', 'gray.900')
+  const { state, setInitialState } = useApp()
+  const bg = useColorModeValue('whiteAlpha.800', 'blackAlpha.800')
 
   return (
     <Flex width="100wh" height="100vh" direction="column" bg={bg}>
@@ -36,7 +36,12 @@ export const Layout = () => {
           <Flex>
             <ColorModeSwitcher />
             {!isEmpty(state.extensions) && !state.isLoading && (
-              <Button ml="2" variant="ghost">
+              <Button
+                ml="2"
+                colorScheme="teal"
+                variant="outline"
+                onClick={setInitialState}
+              >
                 {i18ns.backButton}
               </Button>
             )}

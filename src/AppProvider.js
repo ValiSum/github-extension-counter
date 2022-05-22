@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from 'react'
-import { ACTIONS } from './constants'
+import { ACTIONS, INITIAL_STATE } from './constants'
 import { getFakeExtensionsData } from './mocks'
 
 const AppContext = createContext()
@@ -18,6 +18,8 @@ const appReducer = (state, action) => {
       return { ...state, filterValue: payload.filterValue }
     case ACTIONS.SET_SORT_VALUES:
       return { ...state, sortValues: payload.sortValues }
+    case ACTIONS.SET_INITIAL_STATE:
+      return { ...state, ...payload }
     default:
       throw new Error(`Unhandled action type: ${type}`)
   }
@@ -58,6 +60,10 @@ const AppProvider = ({ initialState, children }) => {
     })
   }
 
+  const setInitialState = () => {
+    dispatch({ type: ACTIONS.SET_INITIAL_STATE, payload: INITIAL_STATE })
+  }
+
   const getData = async () => {
     setIsLoading(true)
     const response = await getFakeExtensionsData()
@@ -73,6 +79,7 @@ const AppProvider = ({ initialState, children }) => {
     setExtensions,
     setFilterValue,
     setSortValues,
+    setInitialState,
     getData,
   }
 
@@ -93,6 +100,7 @@ const useApp = () => {
     setExtensions,
     setFilterValue,
     setSortValues,
+    setInitialState,
     getData,
   } = context
 
@@ -103,6 +111,7 @@ const useApp = () => {
     setExtensions,
     setFilterValue,
     setSortValues,
+    setInitialState,
     getData,
   }
 }
