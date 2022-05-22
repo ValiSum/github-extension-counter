@@ -11,11 +11,14 @@ import {
   Th,
   Td,
   TableContainer,
+  Link,
 } from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useApp } from '../../AppProvider'
 import { FilterInput } from './components/FilterInput'
 import { SortSelector } from './components/SortSelector'
 import { sortAndFilterExtensions } from './utils/sortAndFilterExtensions'
+import { GITHUB_DOMAIN } from '../../constants'
 
 const i18ns = {
   tableTitle1: 'Cantidad',
@@ -37,11 +40,19 @@ export const TableView = () => {
           <FilterInput />
         </Flex>
         <Flex w="50%" justifyContent="flex-end" alignItems="center">
-          <Badge colorScheme="teal">{owner}</Badge>
+          <Badge colorScheme="teal">
+            <Link href={`${GITHUB_DOMAIN}/${owner}`} isExternal>
+              {owner} <ExternalLinkIcon mx="2px" />
+            </Link>
+          </Badge>
           <Text fontWeight="bold" px="2">
             /
           </Text>
-          <Badge colorScheme="teal">{repository}</Badge>
+          <Badge colorScheme="teal">
+            <Link href={`${GITHUB_DOMAIN}/${owner}/${repository}`} isExternal>
+              {repository} <ExternalLinkIcon mx="2px" />
+            </Link>
+          </Badge>
         </Flex>
       </Center>
       <Box maxH="calc(100% - 100px)" w="100%" overflowY="scroll">

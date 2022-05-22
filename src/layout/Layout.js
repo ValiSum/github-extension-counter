@@ -19,8 +19,8 @@ import { TableView } from '../components/TableView'
 const i18ns = {
   appTitle: 'Github Extension Counter',
   backButton: 'Volver',
-  rightsText: '© All rights are reserved',
-  authorText: 'Made with ♥ by',
+  rightsText: '© Todos los derechos están reservados',
+  authorText: 'Hecho con ♥ por',
   authorName: 'ValiSum',
   errorTitle: 'Ha habido un error!',
   errorDescription: 'Comprueba que todos los datos introducidos son correctos.',

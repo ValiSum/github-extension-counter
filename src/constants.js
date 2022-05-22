@@ -25,3 +25,5 @@ export const OPTION_VALUES = {
   asc: 'asc',
   desc: 'desc',
 }
+
+export const GITHUB_DOMAIN = 'https://github.com'
