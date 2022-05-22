@@ -14,6 +14,8 @@ const appReducer = (state, action) => {
       return { ...state, isLoading: payload.isLoading }
     case ACTIONS.SET_EXTENSIONS:
       return { ...state, extensions: payload.extensions }
+    case ACTIONS.SET_FILTER_VALUE:
+      return { ...state, filterValue: payload.filterValue }
     case ACTIONS.SET_SORT_VALUES:
       return { ...state, sortValues: payload.sortValues }
     default:
@@ -42,6 +44,10 @@ const AppProvider = ({ initialState, children }) => {
     dispatch({ type: ACTIONS.SET_EXTENSIONS, payload: { extensions } })
   }
 
+  const setFilterValue = filterValue => {
+    dispatch({ type: ACTIONS.SET_FILTER_VALUE, payload: { filterValue } })
+  }
+
   const setSortValues = event => {
     const {
       target: { name, value },
@@ -65,6 +71,7 @@ const AppProvider = ({ initialState, children }) => {
     setFormValues,
     setIsLoading,
     setExtensions,
+    setFilterValue,
     setSortValues,
     getData,
   }
@@ -84,6 +91,7 @@ const useApp = () => {
     setFormValues,
     setIsLoading,
     setExtensions,
+    setFilterValue,
     setSortValues,
     getData,
   } = context
@@ -93,6 +101,7 @@ const useApp = () => {
     setFormValues,
     setIsLoading,
     setExtensions,
+    setFilterValue,
     setSortValues,
     getData,
   }
