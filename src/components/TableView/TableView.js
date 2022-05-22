@@ -15,6 +15,7 @@ import {
   TableContainer,
 } from '@chakra-ui/react'
 import { useApp } from '../../AppProvider'
+import { FilterInput } from './components/FilterInput'
 import { SortSelector } from './components/SortSelector'
 
 const i18ns = {
@@ -33,15 +34,7 @@ export const TableView = () => {
     <Flex direction="column" h="100%">
       <Center h="100px">
         <Flex w="50%">
-          <InputGroup backgroundColor="whiteAlpha.900" borderRadius="6">
-            <Input
-              type="text"
-              name="owner"
-              placeholder="Buscar extension"
-              value={state.query}
-              size="md"
-            />
-          </InputGroup>
+          <FilterInput />
         </Flex>
         <Flex w="50%" justifyContent="flex-end" alignItems="center">
           <Badge colorScheme="teal">{owner}</Badge>
