@@ -22,8 +22,14 @@ const appReducer = (state, action) => {
 const AppProvider = ({ initialState, children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState)
 
-  const setFormValues = formValues => {
-    dispatch({ type: ACTIONS.SET_FORM_VALUES, payload: { formValues } })
+  const setFormValues = event => {
+    const {
+      target: { name, value },
+    } = event
+    dispatch({
+      type: ACTIONS.SET_FORM_VALUES,
+      payload: { formValues: { ...state.formValues, [name]: value } },
+    })
   }
 
   const setIsLoading = isLoading => {
@@ -35,9 +41,11 @@ const AppProvider = ({ initialState, children }) => {
   }
 
   const getData = async () => {
+    setIsLoading(true)
     const response = await getFakeExtensionsData()
 
     setExtensions(response)
+    setIsLoading(false)
   }
 
   const value = { state, setFormValues, setIsLoading, setExtensions, getData }
