@@ -127,7 +127,7 @@ const AppProvider = ({ initialState, children }) => {
       setPromises(promises)
       setExtensions(extensions)
     }
-  }, [state.extensions, state.promises])
+  }, [state])
 
   useEffect(() => {
     if (state.promises.length > 0) {
