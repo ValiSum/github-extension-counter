@@ -1,6 +1,8 @@
 import {
   Center,
   Box,
+  Text,
+  Badge,
   Flex,
   InputGroup,
   Input,
@@ -13,6 +15,7 @@ import {
   TableContainer,
 } from '@chakra-ui/react'
 import { useApp } from '../../AppProvider'
+import { SortSelector } from './components/SortSelector'
 
 const i18ns = {
   tableTitle1: 'Cantidad',
@@ -21,11 +24,14 @@ const i18ns = {
 
 export const TableView = () => {
   const { state } = useApp()
+  const {
+    formValues: { owner, repository },
+  } = state
 
   return (
     <Flex direction="column" h="100%">
       <Center h="100px">
-        <InputGroup>
+        <InputGroup w="50%" backgroundColor="whiteAlpha.900" borderRadius="6">
           <Input
             type="text"
             name="owner"
@@ -34,14 +40,25 @@ export const TableView = () => {
             size="md"
           />
         </InputGroup>
+        <Flex w="50%" justifyContent="flex-end" alignItems="center">
+          <Badge colorScheme="teal">{owner}</Badge>
+          <Text fontWeight="bold" px="2">
+            /
+          </Text>
+          <Badge colorScheme="teal">{repository}</Badge>
+        </Flex>
       </Center>
       <Box maxH="calc(100% - 100px)" w="100%" overflowY="scroll">
         <TableContainer>
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th>{i18ns.tableTitle1}</Th>
-                <Th>{i18ns.tableTitle2}</Th>
+                <Th>
+                  <SortSelector name="quantity" label={i18ns.tableTitle1} />
+                </Th>
+                <Th>
+                  <SortSelector name="extension" label={i18ns.tableTitle2} />
+                </Th>
               </Tr>
             </Thead>
             <Tbody>

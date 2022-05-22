@@ -36,7 +36,9 @@ export const Layout = () => {
           <Flex>
             <ColorModeSwitcher />
             {!isEmpty(state.extensions) && !state.isLoading && (
-              <Button ml="2">{i18ns.backButton}</Button>
+              <Button ml="2" variant="ghost">
+                {i18ns.backButton}
+              </Button>
             )}
           </Flex>
         </Flex>
