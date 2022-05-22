@@ -41,7 +41,7 @@ export const TableView = () => {
             <Thead>
               <Tr>
                 <Th>{i18ns.tableTitle1}</Th>
-                <Th>{i18ns.tableTitle1}</Th>
+                <Th>{i18ns.tableTitle2}</Th>
               </Tr>
             </Thead>
             <Tbody>
