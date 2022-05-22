@@ -26,20 +26,23 @@ export const TableView = () => {
   const { state } = useApp()
   const {
     formValues: { owner, repository },
+    sortValues: { quantity, extension },
   } = state
 
   return (
     <Flex direction="column" h="100%">
       <Center h="100px">
-        <InputGroup w="50%" backgroundColor="whiteAlpha.900" borderRadius="6">
-          <Input
-            type="text"
-            name="owner"
-            placeholder="Buscar extension"
-            value={state.query}
-            size="md"
-          />
-        </InputGroup>
+        <Flex w="50%">
+          <InputGroup backgroundColor="whiteAlpha.900" borderRadius="6">
+            <Input
+              type="text"
+              name="owner"
+              placeholder="Buscar extension"
+              value={state.query}
+              size="md"
+            />
+          </InputGroup>
+        </Flex>
         <Flex w="50%" justifyContent="flex-end" alignItems="center">
           <Badge colorScheme="teal">{owner}</Badge>
           <Text fontWeight="bold" px="2">
@@ -54,10 +57,18 @@ export const TableView = () => {
             <Thead>
               <Tr>
                 <Th>
-                  <SortSelector name="quantity" label={i18ns.tableTitle1} />
+                  <SortSelector
+                    name="quantity"
+                    label={i18ns.tableTitle1}
+                    defaultValue={quantity}
+                  />
                 </Th>
                 <Th>
-                  <SortSelector name="extension" label={i18ns.tableTitle2} />
+                  <SortSelector
+                    name="extension"
+                    label={i18ns.tableTitle2}
+                    defaultValue={extension}
+                  />
                 </Th>
               </Tr>
             </Thead>

@@ -12,8 +12,10 @@ const appReducer = (state, action) => {
       return { ...state, formValues: payload.formValues }
     case ACTIONS.SET_IS_LOADING:
       return { ...state, isLoading: payload.isLoading }
-    case 'SET_EXTENSIONS':
+    case ACTIONS.SET_EXTENSIONS:
       return { ...state, extensions: payload.extensions }
+    case ACTIONS.SET_SORT_VALUES:
+      return { ...state, sortValues: payload.sortValues }
     default:
       throw new Error(`Unhandled action type: ${type}`)
   }
@@ -40,6 +42,16 @@ const AppProvider = ({ initialState, children }) => {
     dispatch({ type: ACTIONS.SET_EXTENSIONS, payload: { extensions } })
   }
 
+  const setSortValues = event => {
+    const {
+      target: { name, value },
+    } = event
+    dispatch({
+      type: ACTIONS.SET_SORT_VALUES,
+      payload: { sortValues: { ...state.sortValues, [name]: value } },
+    })
+  }
+
   const getData = async () => {
     setIsLoading(true)
     const response = await getFakeExtensionsData()
@@ -48,7 +60,14 @@ const AppProvider = ({ initialState, children }) => {
     setIsLoading(false)
   }
 
-  const value = { state, setFormValues, setIsLoading, setExtensions, getData }
+  const value = {
+    state,
+    setFormValues,
+    setIsLoading,
+    setExtensions,
+    setSortValues,
+    getData,
+  }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
@@ -60,9 +79,23 @@ const useApp = () => {
     throw new Error('useApp must be used within a AppProvider')
   }
 
-  const { state, setFormValues, setIsLoading, setExtensions, getData } = context
+  const {
+    state,
+    setFormValues,
+    setIsLoading,
+    setExtensions,
+    setSortValues,
+    getData,
+  } = context
 
-  return { state, setFormValues, setIsLoading, setExtensions, getData }
+  return {
+    state,
+    setFormValues,
+    setIsLoading,
+    setExtensions,
+    setSortValues,
+    getData,
+  }
 }
 
 export { AppProvider, useApp }
