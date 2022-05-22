@@ -9,3 +9,8 @@ export const INITIAL_STATE = {
   isLoading: false,
   extensions: {},
 }
+
+export const OPTION_VALUES = {
+  asc: 'asc',
+  desc: 'desc',
+}
