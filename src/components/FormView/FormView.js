@@ -22,6 +22,7 @@ export const FormView = () => {
   const { state, getData, setFormValues } = useApp()
   const {
     formValues: { owner, repository },
+    isError,
   } = state
 
   return (
@@ -45,8 +46,9 @@ export const FormView = () => {
             value={owner}
             onChange={setFormValues}
             disabled={state.isLoading}
+            isInvalid={isError}
           />
-          {owner && <InputRightElement children={<CheckIcon color="teal" />} />}
+          {owner && <InputRightElement children={<CheckIcon />} />}
         </InputGroup>
         <InputGroup>
           <Input
@@ -57,10 +59,9 @@ export const FormView = () => {
             value={repository}
             onChange={setFormValues}
             disabled={state.isLoading}
+            isInvalid={isError}
           />
-          {repository && (
-            <InputRightElement children={<CheckIcon color="teal" />} />
-          )}
+          {repository && <InputRightElement children={<CheckIcon />} />}
         </InputGroup>
         <Button
           colorScheme="teal"

@@ -27,6 +27,8 @@ const appReducer = (state, action) => {
       return { ...state, filterValue: payload.filterValue }
     case ACTIONS.SET_SORT_VALUES:
       return { ...state, sortValues: payload.sortValues }
+    case ACTIONS.SET_IS_ERROR:
+      return { ...state, isError: payload.isError }
     case ACTIONS.SET_INITIAL_STATE:
       return { ...state, ...payload }
     default:
@@ -41,6 +43,9 @@ const AppProvider = ({ initialState, children }) => {
     const {
       target: { name, value },
     } = event
+    if (state.isError && state.formValues[name].value !== value) {
+      setIsError(false)
+    }
     dispatch({
       type: ACTIONS.SET_FORM_VALUES,
       payload: { formValues: { ...state.formValues, [name]: value } },
@@ -73,6 +78,10 @@ const AppProvider = ({ initialState, children }) => {
     })
   }
 
+  const setIsError = isError => {
+    dispatch({ type: ACTIONS.SET_IS_ERROR, payload: { isError } })
+  }
+
   const setInitialState = () => {
     dispatch({
       type: ACTIONS.SET_INITIAL_STATE,
@@ -81,54 +90,66 @@ const AppProvider = ({ initialState, children }) => {
   }
 
   const getData = async () => {
-    setIsLoading(true)
-    const {
-      formValues: { owner, repository },
-    } = state
-    const response = await getBranch(owner, repository)
+    try {
+      setIsLoading(true)
+      const {
+        formValues: { owner, repository },
+      } = state
+      const response = await getBranch(owner, repository)
 
-    if (response?.data?.commit?.sha) {
-      const sha = response?.data?.commit?.sha
-      setPromises([getTrees(owner, repository, sha)])
+      if (response?.data?.commit?.sha) {
+        const sha = response?.data?.commit?.sha
+        setPromises([getTrees(owner, repository, sha)])
+      }
+    } catch (_) {
+      setIsError(true)
+      setIsLoading(false)
     }
   }
 
   const getRepositoryTree = useCallback(async () => {
-    const responses = await Promise.all(state.promises.map(promise => promise))
+    try {
+      const responses = await Promise.all(
+        state.promises.map(promise => promise)
+      )
 
-    if (responses.length > 0) {
-      let promises = []
-      let extensions = state.extensions
+      if (responses.length > 0) {
+        let promises = []
+        let extensions = state.extensions
 
-      responses.forEach(response => {
-        if (response?.data?.tree) {
-          const tree = response?.data?.tree
+        responses.forEach(response => {
+          if (response?.data?.tree) {
+            const tree = response?.data?.tree
 
-          tree.forEach(({ path, sha, type }) => {
-            if (type === 'tree') {
-              promises.push(
-                getTrees(
-                  state.formValues.owner,
-                  state.formValues.repository,
-                  sha
+            tree.forEach(({ path, sha, type }) => {
+              if (type === 'tree') {
+                promises.push(
+                  getTrees(
+                    state.formValues.owner,
+                    state.formValues.repository,
+                    sha
+                  )
                 )
-              )
-            } else {
-              const key = keyExtractor(path)
-              if (key) {
-                if (extensions[key]) {
-                  extensions[key] = extensions[key] + 1
-                } else {
-                  extensions[key] = 1
+              } else {
+                const key = keyExtractor(path)
+                if (key) {
+                  if (extensions[key]) {
+                    extensions[key] = extensions[key] + 1
+                  } else {
+                    extensions[key] = 1
+                  }
                 }
               }
-            }
-          })
-        }
-      })
+            })
+          }
+        })
 
-      setPromises(promises)
-      setExtensions(extensions)
+        setPromises(promises)
+        setExtensions(extensions)
+      }
+    } catch (_) {
+      setIsError(true)
+      setIsLoading(false)
     }
   }, [state.extensions, state.formValues, state.promises])
 
@@ -149,6 +170,7 @@ const AppProvider = ({ initialState, children }) => {
     setExtensions,
     setFilterValue,
     setSortValues,
+    setIsError,
     setInitialState,
     getData,
   }
@@ -170,6 +192,7 @@ const useApp = () => {
     setExtensions,
     setFilterValue,
     setSortValues,
+    setIsError,
     setInitialState,
     getData,
   } = context
@@ -181,6 +204,7 @@ const useApp = () => {
     setExtensions,
     setFilterValue,
     setSortValues,
+    setIsError,
     setInitialState,
     getData,
   }

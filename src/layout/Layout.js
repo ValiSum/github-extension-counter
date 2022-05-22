@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   Flex,
   Link,
@@ -7,6 +8,7 @@ import {
   Heading,
   Button,
   Center,
+  useToast,
 } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 import { useApp } from '../AppProvider'
@@ -23,8 +25,28 @@ const i18ns = {
 }
 
 export const Layout = () => {
+  const toast = useToast()
+
   const { state, setInitialState } = useApp()
   const bg = useColorModeValue('whiteAlpha.800', 'blackAlpha.800')
+
+  useEffect(() => {
+    if (state.isError) {
+      const toastId = 'error-toast'
+      if (!toast.isActive(toastId)) {
+        toast({
+          id: toastId,
+          position: 'top',
+          title: 'Ha habido un error!',
+          description:
+            'Comprueba que todos los datos introducidos son correctos.',
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        })
+      }
+    }
+  }, [state.isError, toast])
 
   return (
     <Flex width="100wh" height="100vh" direction="column" bg={bg}>
