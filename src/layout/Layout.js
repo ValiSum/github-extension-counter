@@ -28,9 +28,8 @@ const i18ns = {
 
 export const Layout = () => {
   const toast = useToast()
-
   const { state, setInitialState } = useApp()
-  const bg = useColorModeValue('whiteAlpha.800', 'blackAlpha.800')
+  const bg = useColorModeValue('whiteAlpha.800', 'whiteAlpha.100')
 
   useEffect(() => {
     if (state.isError) {
