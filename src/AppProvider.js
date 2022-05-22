@@ -82,15 +82,21 @@ const AppProvider = ({ initialState, children }) => {
 
   const getData = async () => {
     setIsLoading(true)
-    const response = await getBranch()
+    const {
+      formValues: { owner, repository },
+    } = state
+    const response = await getBranch(owner, repository)
 
     if (response?.data?.commit?.sha) {
       const sha = response?.data?.commit?.sha
-      setPromises([getTrees(sha)])
+      setPromises([getTrees(owner, repository, sha)])
     }
   }
 
   const getRepositoryTree = useCallback(async () => {
+    const {
+      formValues: { owner, repository },
+    } = state
     const responses = await Promise.all(state.promises.map(promise => promise))
 
     if (responses.length > 0) {
@@ -103,7 +109,7 @@ const AppProvider = ({ initialState, children }) => {
 
           tree.forEach(({ path, sha, type }) => {
             if (type === 'tree') {
-              promises.push(getTrees(sha))
+              promises.push(getTrees(owner, repository, sha))
             } else {
               const key = keyExtractor(path)
               if (key) {
