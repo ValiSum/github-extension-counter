@@ -20,6 +20,7 @@ import { sortAndFilterExtensions } from './utils/sortAndFilterExtensions'
 const i18ns = {
   tableTitle1: 'Cantidad',
   tableTitle2: 'Extension',
+  noResults: 'No hay resultados para esta busqueda',
 }
 
 export const TableView = () => {
@@ -44,38 +45,44 @@ export const TableView = () => {
         </Flex>
       </Center>
       <Box maxH="calc(100% - 100px)" w="100%" overflowY="scroll">
-        <TableContainer>
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>
-                  <SortSelector
-                    name="quantity"
-                    label={i18ns.tableTitle1}
-                    defaultValue={quantity}
-                    disabled={Boolean(extension.length > 0)}
-                  />
-                </Th>
-                <Th>
-                  <SortSelector
-                    name="extension"
-                    label={i18ns.tableTitle2}
-                    defaultValue={extension}
-                    disabled={Boolean(quantity.length > 0)}
-                  />
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {sortAndFilterExtensions(state).map(item => (
-                <Tr key={item[0]}>
-                  <Td>{item[1]}</Td>
-                  <Td>{item[0]}</Td>
+        {sortAndFilterExtensions(state).length > 0 ? (
+          <TableContainer>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>
+                    <SortSelector
+                      name="quantity"
+                      label={i18ns.tableTitle1}
+                      defaultValue={quantity}
+                      disabled={Boolean(extension.length > 0)}
+                    />
+                  </Th>
+                  <Th>
+                    <SortSelector
+                      name="extension"
+                      label={i18ns.tableTitle2}
+                      defaultValue={extension}
+                      disabled={Boolean(quantity.length > 0)}
+                    />
+                  </Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {sortAndFilterExtensions(state).map(item => (
+                  <Tr key={item[0]}>
+                    <Td>{item[1]}</Td>
+                    <Td>{item[0]}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Center h="200px">
+            <Text>{i18ns.noResults}</Text>
+          </Center>
+        )}
       </Box>
     </Flex>
   )
