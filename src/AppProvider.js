@@ -94,9 +94,6 @@ const AppProvider = ({ initialState, children }) => {
   }
 
   const getRepositoryTree = useCallback(async () => {
-    const {
-      formValues: { owner, repository },
-    } = state
     const responses = await Promise.all(state.promises.map(promise => promise))
 
     if (responses.length > 0) {
@@ -109,7 +106,13 @@ const AppProvider = ({ initialState, children }) => {
 
           tree.forEach(({ path, sha, type }) => {
             if (type === 'tree') {
-              promises.push(getTrees(owner, repository, sha))
+              promises.push(
+                getTrees(
+                  state.formValues.owner,
+                  state.formValues.repository,
+                  sha
+                )
+              )
             } else {
               const key = keyExtractor(path)
               if (key) {
@@ -127,7 +130,7 @@ const AppProvider = ({ initialState, children }) => {
       setPromises(promises)
       setExtensions(extensions)
     }
-  }, [state])
+  }, [state.extensions, state.formValues, state.promises])
 
   useEffect(() => {
     if (state.promises.length > 0) {
