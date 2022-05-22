@@ -22,6 +22,8 @@ const i18ns = {
   rightsText: '© All rights are reserved',
   authorText: 'Made with ♥ by',
   authorName: 'ValiSum',
+  errorTitle: 'Ha habido un error!',
+  errorDescription: 'Comprueba que todos los datos introducidos son correctos.',
 }
 
 export const Layout = () => {
@@ -37,9 +39,8 @@ export const Layout = () => {
         toast({
           id: toastId,
           position: 'top',
-          title: 'Ha habido un error!',
-          description:
-            'Comprueba que todos los datos introducidos son correctos.',
+          title: i18ns.errorTitle,
+          description: i18ns.errorDescription,
           status: 'error',
           duration: 2000,
           isClosable: true,
