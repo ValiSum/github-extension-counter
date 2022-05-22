@@ -15,6 +15,8 @@ export const INITIAL_STATE = {
   sortValues: { quantity: '', extension: '' },
 }
 
+export const TOKEN = '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'
+
 export const OPTION_VALUES = {
   asc: 'asc',
   desc: 'desc',
