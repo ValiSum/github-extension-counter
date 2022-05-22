@@ -1,6 +1,13 @@
-import { createContext, useContext, useReducer } from 'react'
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useCallback,
+  useEffect,
+} from 'react'
 import { ACTIONS, INITIAL_STATE } from './constants'
-import { getFakeExtensionsData } from './mocks'
+import { getBranch, getTrees } from './services/api'
+import { keyExtractor } from './utils/keyExtractor'
 
 const AppContext = createContext()
 
@@ -12,6 +19,8 @@ const appReducer = (state, action) => {
       return { ...state, formValues: payload.formValues }
     case ACTIONS.SET_IS_LOADING:
       return { ...state, isLoading: payload.isLoading }
+    case ACTIONS.SET_PROMISES:
+      return { ...state, promises: payload.promises }
     case ACTIONS.SET_EXTENSIONS:
       return { ...state, extensions: payload.extensions }
     case ACTIONS.SET_FILTER_VALUE:
@@ -42,6 +51,10 @@ const AppProvider = ({ initialState, children }) => {
     dispatch({ type: ACTIONS.SET_IS_LOADING, payload: { isLoading } })
   }
 
+  const setPromises = promises => {
+    dispatch({ type: ACTIONS.SET_PROMISES, payload: { promises } })
+  }
+
   const setExtensions = extensions => {
     dispatch({ type: ACTIONS.SET_EXTENSIONS, payload: { extensions } })
   }
@@ -61,16 +74,64 @@ const AppProvider = ({ initialState, children }) => {
   }
 
   const setInitialState = () => {
-    dispatch({ type: ACTIONS.SET_INITIAL_STATE, payload: INITIAL_STATE })
+    dispatch({
+      type: ACTIONS.SET_INITIAL_STATE,
+      payload: { ...INITIAL_STATE, extensions: {} },
+    })
   }
 
   const getData = async () => {
     setIsLoading(true)
-    const response = await getFakeExtensionsData()
+    const response = await getBranch()
 
-    setExtensions(response)
-    setIsLoading(false)
+    if (response?.data?.commit?.sha) {
+      const sha = response?.data?.commit?.sha
+      setPromises([getTrees(sha)])
+    }
   }
+
+  const getRepositoryTree = useCallback(async () => {
+    const responses = await Promise.all(state.promises.map(promise => promise))
+
+    if (responses.length > 0) {
+      let promises = []
+      let extensions = state.extensions
+
+      responses.forEach(response => {
+        if (response?.data?.tree) {
+          const tree = response?.data?.tree
+
+          tree.forEach(({ path, sha, type }) => {
+            if (type === 'tree') {
+              promises.push(getTrees(sha))
+            } else {
+              const key = keyExtractor(path)
+              if (key) {
+                if (extensions[key]) {
+                  extensions[key] = extensions[key] + 1
+                } else {
+                  extensions[key] = 1
+                }
+              }
+            }
+          })
+        }
+      })
+
+      setPromises(promises)
+      setExtensions(extensions)
+    }
+  }, [state.extensions, state.promises])
+
+  useEffect(() => {
+    if (state.promises.length > 0) {
+      getRepositoryTree()
+    } else {
+      if (Object.keys(state.extensions).length > 0) {
+        setIsLoading(false)
+      }
+    }
+  }, [state.promises, state.extensions, getRepositoryTree])
 
   const value = {
     state,
